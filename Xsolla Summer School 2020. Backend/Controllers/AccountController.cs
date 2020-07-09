@@ -1,11 +1,11 @@
 ﻿using Common.Users.Dto;
+using Common.Users.Dto.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Xsolla_Summer_School_2020._Backend.Interfaces;
-using Common.Users.Dto.Requests;
-using Xsolla_Summer_School_2020._Backend.Services;
 using Xsolla_Summer_School_2020._Backend.Infrastructure;
+using Xsolla_Summer_School_2020._Backend.Interfaces;
+using Xsolla_Summer_School_2020._Backend.Services;
 
 namespace Xsolla_Summer_School_2020._Backend.Controllers
 {

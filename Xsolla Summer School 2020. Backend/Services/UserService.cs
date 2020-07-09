@@ -42,7 +42,7 @@ namespace Xsolla_Summer_School_2020._Backend.Services
 
             user.Password = SecurePasswordHasher.HasFunction(user.Password);
             var userModel = new UserDto() { Login = user.Login, Password = user.Password };
-            
+
             _context.Users.Add(userModel);
             await _context.SaveChangesAsync();
             var users = await _context.Users.FirstOrDefaultAsync(x => x.Login == user.Login);
@@ -147,18 +147,18 @@ namespace Xsolla_Summer_School_2020._Backend.Services
                     throw new AppException("Invalid username or password");
                 }
             }
-           var firstUserRoles = _context.UserRoles.FirstOrDefault(x => x.UserId == person.Id);
-           var roles = _context.Roles.FirstOrDefault(x => x.IdRole == firstUserRoles.RoleIdRole);
+            var firstUserRoles = _context.UserRoles.FirstOrDefault(x => x.UserId == person.Id);
+            var roles = _context.Roles.FirstOrDefault(x => x.IdRole == firstUserRoles.RoleIdRole);
 
-           var claims = new List<Claim>
+            var claims = new List<Claim>
            {
                new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
                new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.NameRole)
            };
-           var claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-           ClaimsIdentity.DefaultRoleClaimType);
-          
-           return claimsIdentity;
+            var claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+            ClaimsIdentity.DefaultRoleClaimType);
+
+            return claimsIdentity;
         }
 
         private UserModelRequest MapToRequest(UserDto user)

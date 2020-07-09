@@ -30,7 +30,7 @@ namespace Xsolla_Summer_School_2020._Backend.Infrastructure
                     Scheme = "Bearer"
                 });
 
-            config.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                config.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
                         new OpenApiSecurityScheme

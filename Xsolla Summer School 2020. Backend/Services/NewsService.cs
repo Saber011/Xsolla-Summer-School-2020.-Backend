@@ -1,11 +1,11 @@
 ﻿using Common.News.Dto;
+using Common.News.Dto.Requests;
+using Common.Users.Dto;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 using Xsolla_Summer_School_2020._Backend.Infrastructure;
 using Xsolla_Summer_School_2020._Backend.Interfaces;
-using Common.News.Dto.Requests;
-using Common.Users.Dto;
-using System.Linq;
 
 namespace Xsolla_Summer_School_2020._Backend.Services
 {
@@ -22,8 +22,8 @@ namespace Xsolla_Summer_School_2020._Backend.Services
         /// <inheritdoc/>
         public async Task<NewsDto> AddNewsAsync(AddNewsRequest request)
         {
-             await _context.News.AddAsync(MaptoDto(request));
-             await _context.SaveChangesAsync();
+            await _context.News.AddAsync(MaptoDto(request));
+            await _context.SaveChangesAsync();
 
             return MaptoDto(request);
         }
@@ -31,7 +31,7 @@ namespace Xsolla_Summer_School_2020._Backend.Services
         /// <inheritdoc/>
         public async Task<NewsDto[]> GetMostPopularNewsAsync()
         {
-            return await _context.News.OrderByDescending(x=>x.Rating).ToArrayAsync();
+            return await _context.News.OrderByDescending(x => x.Rating).ToArrayAsync();
         }
 
         /// <inheritdoc/>

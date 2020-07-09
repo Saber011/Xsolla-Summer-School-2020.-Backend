@@ -9,7 +9,6 @@ namespace Xsolla_Summer_School_2020._Backend.Interfaces
     /// </summary>
     public interface IUserService
     {
-
         /// <summary>
         /// Поиск по id
         /// </summary>
