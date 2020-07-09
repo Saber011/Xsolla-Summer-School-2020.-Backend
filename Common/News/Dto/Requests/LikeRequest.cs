@@ -14,10 +14,5 @@
         /// Id Новости.
         /// </summary>
         public int IdNews { get; set; }
-
-        /// <summary>
-        /// Лайк.
-        /// </summary>
-        public bool Like { get; set; }
     }
 }

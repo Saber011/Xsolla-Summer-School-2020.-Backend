@@ -12,27 +12,42 @@ namespace Xsolla_Summer_School_2020._Backend.Interfaces
         /// <summary>
         /// Получить все новости.
         /// </summary>
-        public Task<NewsDto[]> GetNews();
+        public Task<NewsDto[]> GetNewsAsync();
 
         /// <summary>
         /// Добавление новостей.
         /// </summary>
         /// <returns></returns>
-        public Task<NewsDto> AddNews(AddNewsRequest request);
+        public Task<NewsDto> AddNewsAsync(AddNewsRequest request);
 
         /// <summary>
         /// Удаление новостей.
         /// </summary>
-        public Task<NewsDto> RemoveNews(RemoveNewsRequest request);
+        public Task<NewsDto> RemoveNewsAsync(RemoveNewsRequest request);
 
         /// <summary>
         /// Обновление новостей.
         /// </summary>
-        public Task<NewsDto> UpdateNews(UpdateNewsRequest request);
+        public Task<NewsDto> UpdateNewsAsync(UpdateNewsRequest request);
 
         /// <summary>
         /// Лайк новости.
         /// </summary>
-        public Task<NewsDto> LikeNews(LikeRequest request);
+        public Task<NewsDto> LikeNewsAsync(LikeRequest request);
+
+        /// <summary>
+        /// Снятие оценки новости новости.
+        /// </summary>
+        public Task<NewsDto> RemoveLikeNewsAsync(LikeRequest request);
+
+        /// <summary>
+        /// Получить самые популярные новости.
+        /// </summary>
+        public Task<NewsDto[]> GetMostPopularNewsAsync();
+
+        /// <summary>
+        /// Получить новость по категории.
+        /// </summary>
+        public Task<NewsDto[]> GetNewsCategoryAsync(NewsByCategoryRequest request);
     }
 }

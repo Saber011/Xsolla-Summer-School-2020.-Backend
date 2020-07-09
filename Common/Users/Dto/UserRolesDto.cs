@@ -5,7 +5,7 @@ namespace Common.Users.Dto
     /// <summary>
     /// Журнал ролей.
     /// </summary>
-    public sealed class UserRoles
+    public sealed class UserRolesDto
     {
         /// <summary>
         /// ID журнала.

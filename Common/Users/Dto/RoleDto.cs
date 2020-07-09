@@ -5,7 +5,7 @@ namespace Common.Users.Dto
     /// <summary>
     /// Роли.
     /// </summary>
-    public sealed class Role
+    public sealed class RoleDto
     {
         /// <summary>
         /// ID роли.

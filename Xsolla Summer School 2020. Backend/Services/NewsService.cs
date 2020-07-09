@@ -5,6 +5,7 @@ using Xsolla_Summer_School_2020._Backend.Infrastructure;
 using Xsolla_Summer_School_2020._Backend.Interfaces;
 using Common.News.Dto.Requests;
 using Common.Users.Dto;
+using System.Linq;
 
 namespace Xsolla_Summer_School_2020._Backend.Services
 {
@@ -19,7 +20,7 @@ namespace Xsolla_Summer_School_2020._Backend.Services
         }
 
         /// <inheritdoc/>
-        public async Task<NewsDto> AddNews(AddNewsRequest request)
+        public async Task<NewsDto> AddNewsAsync(AddNewsRequest request)
         {
              await _context.News.AddAsync(MaptoDto(request));
              await _context.SaveChangesAsync();
@@ -28,37 +29,70 @@ namespace Xsolla_Summer_School_2020._Backend.Services
         }
 
         /// <inheritdoc/>
-        public async Task<NewsDto[]> GetNews()
+        public async Task<NewsDto[]> GetMostPopularNewsAsync()
+        {
+            return await _context.News.OrderByDescending(x=>x.Rating).ToArrayAsync();
+        }
+
+        /// <inheritdoc/>
+        public async Task<NewsDto[]> GetNewsAsync()
         {
             return await _context.News.ToArrayAsync();
         }
 
         /// <inheritdoc/>
-        public async Task<NewsDto> LikeNews(LikeRequest request)
+        public async Task<NewsDto[]> GetNewsCategoryAsync(NewsByCategoryRequest request)
+        {
+            return await _context.News.Where(x => x.IdCategory == request.IdCategory).ToArrayAsync();
+        }
+
+        /// <inheritdoc/>
+        public async Task<NewsDto> LikeNewsAsync(LikeRequest request)
         {
             var news = await _context.News.FirstOrDefaultAsync(x => x.IdNews == request.IdNews);
-            var userNews = await _context.UserLikesNews.FirstOrDefaultAsync(x => x.IdNews == request.IdNews);
-            var likeNews = userNews ?? new UserLikesNews()
-            {
-                IdUser = request.IdUser,
-                IdNews = request.IdNews,
-                Like = request.Like
-            };
+            var userNews = await _context.UserLikesNews.FirstOrDefaultAsync(x => x.IdNews == request.IdNews && x.IdUser == request.IdUser);
             if (userNews == null)
             {
-                await _context.AddAsync(likeNews);
+                await _context.UserLikesNews.AddAsync(new UserLikesNewsDto
+                {
+                    IdNews = request.IdNews,
+                    IdUser = request.IdUser,
+                    Like = true,
+                });
+                news.Rating += 1;
+            }
+            else
+            {
+                userNews.Like = !userNews.Like;
+                news.Rating += userNews.Like ? 1 : -1;
+                _context.UserLikesNews.Update(userNews);
             }
 
-            news.Rating += request.Like && likeNews.Like ? 1 : -1;
-            
-            _context.News.Update(news);
             await _context.SaveChangesAsync();
 
             return news;
         }
 
         /// <inheritdoc/>
-        public async Task<NewsDto> RemoveNews(RemoveNewsRequest request)
+        public async Task<NewsDto> RemoveLikeNewsAsync(LikeRequest request)
+        {
+            var news = await _context.News.FirstOrDefaultAsync(x => x.IdNews == request.IdNews);
+            var userNews = await _context.UserLikesNews.FirstOrDefaultAsync(x => x.IdNews == request.IdNews && x.IdUser == request.IdUser);
+            _context.UserLikesNews.Remove(userNews);
+
+            if (userNews.Like)
+            {
+                news.Rating -= 1;
+                _context.Update(news);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return news;
+        }
+
+        /// <inheritdoc/>
+        public async Task<NewsDto> RemoveNewsAsync(RemoveNewsRequest request)
         {
             var News = await _context.News.FirstOrDefaultAsync(x => x.IdNews == request.IdNews);
             _context.News.Remove(News);
@@ -68,7 +102,7 @@ namespace Xsolla_Summer_School_2020._Backend.Services
         }
 
         /// <inheritdoc/>
-        public async Task<NewsDto> UpdateNews(UpdateNewsRequest request)
+        public async Task<NewsDto> UpdateNewsAsync(UpdateNewsRequest request)
         {
             var News = await _context.News.FirstOrDefaultAsync(x => x.IdNews == request.IdNews);
             _context.News.Update(News);

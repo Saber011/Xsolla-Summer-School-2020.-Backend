@@ -5,7 +5,7 @@ namespace Common.Users.Dto
     /// <summary>
     /// Журнал просмотренных новостей пользователя.
     /// </summary>
-    public sealed class UserLikesNews
+    public sealed class UserLikesNewsDto
     {
         /// <summary>
         /// Id Журнала.

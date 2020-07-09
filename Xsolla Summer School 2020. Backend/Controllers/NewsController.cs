@@ -2,7 +2,9 @@
 using Common.News.Dto.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Xsolla_Summer_School_2020._Backend.Infrastructure;
 using Xsolla_Summer_School_2020._Backend.Interfaces;
+using Xsolla_Summer_School_2020._Backend.Services;
 
 namespace Xsolla_Summer_School_2020._Backend.Controllers
 {
@@ -11,9 +13,11 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
     public class NewsController : ControllerBase
     {
         private readonly INewsService _service;
-        public NewsController(INewsService service)
+        private readonly ExecuteService _executeService;
+        public NewsController(INewsService service, ExecuteService executeService)
         {
             _service = service;
+            _executeService = executeService;
         }
 
         /// <summary>
@@ -21,11 +25,12 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
         /// </summary>
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpGet("GetNews")]
-        public async Task<NewsDto[]> GetNews()
+        public async Task<ServiceResponse<NewsDto[]>> GetNews()
         {
-            return await _service.GetNews();
+            return await _executeService.TryExecute(() => _service.GetNewsAsync());
         }
 
         /// <summary>
@@ -33,11 +38,12 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
         /// </summary>
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpPut("UpdateNews")]
-        public async Task<NewsDto> UpdateNews(UpdateNewsRequest request)
+        public async Task<ServiceResponse<NewsDto>> UpdateNews(UpdateNewsRequest request)
         {
-            return await _service.UpdateNews(request);
+            return await _executeService.TryExecute(() => _service.UpdateNewsAsync(request));
         }
 
         /// <summary>
@@ -45,11 +51,12 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
         /// </summary>
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpDelete("RemoveNews")]
-        public async Task<NewsDto> RemoveNews(RemoveNewsRequest request)
+        public async Task<ServiceResponse<NewsDto>> RemoveNews(RemoveNewsRequest request)
         {
-            return await _service.RemoveNews(request);
+            return await _executeService.TryExecute(() => _service.RemoveNewsAsync(request));
         }
 
         /// <summary>
@@ -57,11 +64,12 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
         /// </summary>
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpPut("LikeNews")]
-        public async Task<NewsDto> LikeNews(LikeRequest request)
+        public async Task<ServiceResponse<NewsDto>> LikeNews(LikeRequest request)
         {
-            return await _service.LikeNews(request);
+            return await _executeService.TryExecute(() => _service.LikeNewsAsync(request));
         }
 
         /// <summary>
@@ -69,11 +77,51 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
         /// </summary>
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpPost("AddNews")]
-        public async Task<NewsDto> AddNews(AddNewsRequest request)
+        public async Task<ServiceResponse<NewsDto>> AddNews(AddNewsRequest request)
         {
-            return await _service.AddNews(request);
+            return await _executeService.TryExecute(() => _service.AddNewsAsync(request));
+        }
+
+        /// <summary>
+        /// Получить самые популярные новости.
+        /// </summary>
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
+        [HttpPost("GetMostPopularNews")]
+        public async Task<ServiceResponse<NewsDto[]>> GetMostPopularNews()
+        {
+            return await _executeService.TryExecute(() => _service.GetMostPopularNewsAsync());
+        }
+
+        /// <summary>
+        /// Удалить оценку новости.
+        /// </summary>
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
+        [HttpPost("RemoveLikes")]
+        public async Task<ServiceResponse<NewsDto>> RemoveLikesNews(LikeRequest request)
+        {
+            return await _executeService.TryExecute(() => _service.RemoveLikeNewsAsync(request));
+        }
+
+        /// <summary>
+        /// Получить все новости в категории.
+        /// </summary>
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code="401">Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
+        [HttpPost("GetNewsByCategory")]
+        public async Task<ServiceResponse<NewsDto[]>> RemoveLikesNews(NewsByCategoryRequest request)
+        {
+            return await _executeService.TryExecute(() => _service.GetNewsCategoryAsync(request));
         }
     }
 }

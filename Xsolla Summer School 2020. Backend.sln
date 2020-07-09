@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xsolla Summer School 2020. Backend", "Xsolla Summer School 2020. Backend\Xsolla Summer School 2020. Backend.csproj", "{590B39CD-74DE-49DF-8C7A-2B0BE0862E63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xsolla Summer School 2020. Backend", "Xsolla Summer School 2020. Backend\Xsolla Summer School 2020. Backend.csproj", "{590B39CD-74DE-49DF-8C7A-2B0BE0862E63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{F646541F-CDF0-453E-8A48-B4C6E13AC4F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{F646541F-CDF0-453E-8A48-B4C6E13AC4F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{9E88F8EC-7802-4604-AAA9-5C78E7BB69CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{9E88F8EC-7802-4604-AAA9-5C78E7BB69CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

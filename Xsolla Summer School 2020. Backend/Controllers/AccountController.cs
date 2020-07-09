@@ -4,20 +4,25 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Xsolla_Summer_School_2020._Backend.Interfaces;
 using Common.Users.Dto.Requests;
+using Xsolla_Summer_School_2020._Backend.Services;
+using Xsolla_Summer_School_2020._Backend.Infrastructure;
 
 namespace Xsolla_Summer_School_2020._Backend.Controllers
 {
     /// <summary>
     /// Api для работы с пользователем
     /// </summary>
-    [Route("api/Account")]
+    [ApiController]
+    [Route("[controller]")]
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ExecuteService _executeService;
 
-        public AccountController(IUserService userService)
+        public AccountController(IUserService userService, ExecuteService executeService)
         {
             _userService = userService;
+            _executeService = executeService;
         }
 
         /// <summary>
@@ -27,11 +32,12 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
         /// <returns>Найденный пользватель</returns>
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpGet("GetUserById")]
-        public async Task<UserModelRequest> GetUser(int id)
+        public async Task<ServiceResponse<UserModelRequest>> GetUser(int id)
         {
-            return await _userService.GetByIdAsync(id);
+            return await _executeService.TryExecute(() => _userService.GetByIdAsync(id));
         }
 
         /// <summary>
@@ -41,77 +47,84 @@ namespace Xsolla_Summer_School_2020._Backend.Controllers
         /// <returns>Найденный пользватель</returns>
         /// <response code = "200" > Успешное выполнение.</response>
         /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
         /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [Authorize]
         [HttpGet("GetUserByLogin")]
-        public async Task<UserModelRequest> GetUserByLogin(string login)
+        public async Task<ServiceResponse<UserModelRequest>> GetUserByLogin(string login)
         {
-            return await _userService.GetUserByLoginAsync(login);
+            return await _executeService.TryExecute(() => _userService.GetUserByLoginAsync(login));
         }
 
         /// <summary>
         /// Получить всех пользвателей
         /// </summary>
-        /// <response code="200">Успешное выполнение.</response>
-        /// <response code="401">Данный запрос требует аутентификации.</response>
-        /// <response code="500">Непредвиденная ошибка сервера.</response>
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [HttpGet("GetAllUsers")]
-        public async Task<UserModelRequest[]> GetAllUsers()
+        public async Task<ServiceResponse<UserModelRequest[]>> GetAllUsers()
         {
-            return await _userService.GetAllUsersAsync();
+            return await _executeService.TryExecute(() => _userService.GetAllUsersAsync());
         }
 
         /// <summary>
         /// Удалить пользвателя
         /// </summary>
         /// <param name="id">Индефикатор пользователя</param>
-        /// <response code="200">Успешное выполнение.</response>
-        /// <response code="401">Данный запрос требует аутентификации.</response>
-        /// <response code="500">Непредвиденная ошибка сервера.</response>
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [Authorize]
-        [HttpPost("DeleteUser")]
-        public async Task<dynamic> DeleteUser(int id)
+        [HttpDelete("DeleteUser")]
+        public async Task<ServiceResponse<UserDto>> DeleteUser(int id)
         {
-            return await _userService.DeleteAsync(id);
+            return await _executeService.TryExecute(() => _userService.DeleteAsync(id));
         }
 
         /// <summary>
         /// Авторизация пользователя
         /// </summary>
         /// <param name="userRequest">Модель пользователя</param>
-        /// <response code="200">Успешное выполнение.</response>
-        /// <response code="500">Непредвиденная ошибка сервера.</response>
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<dynamic> Login([FromBody] UserRequest userRequest)
+        public async Task<ServiceResponse<dynamic>> Login(UserRequest userRequest)
         {
-            return await _userService.Login(userRequest);
+            return await _executeService.TryExecute(() => _userService.Login(userRequest));
         }
 
         /// <summary>
         /// Регистрация пользователя
         /// </summary>
         /// <param name="userRequest">Модель пользвателя</param>
-        /// <response code="200">Успешное выполнение.</response>
-        /// <response code="500">Непредвиденная ошибка сервера.</response>
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<User> Register([FromBody] UserRequest userRequest)
+        public async Task<ServiceResponse<UserDto>> Register(UserRequest userRequest)
         {
-            return await _userService.CreateAsync(userRequest);
+            return await _executeService.TryExecute(() => _userService.CreateAsync(userRequest));
         }
 
         /// <summary>
         /// Изменить пароль пользователя
         /// </summary>
-        /// <response code="200">Успешное выполнение.</response>
-        /// <response code="401">Данный запрос требует аутентификации.</response>
-        /// <response code="500">Непредвиденная ошибка сервера.</response>
-        [AllowAnonymous]
-        [HttpPost("resertPassword")]
-        public async Task<dynamic> ResetPassword([FromBody] ResetPasswordRequest request)
+        /// <response code = "200" > Успешное выполнение.</response>
+        /// <response code = "204" > Контент не найден</response>
+        /// <response code = "401" > Данный запрос требует аутентификации.</response>
+        /// <response code = "500" > Непредвиденная ошибка сервера.</response>
+        [HttpPut("resertPassword")]
+        public async Task<ServiceResponse<UserDto>> ResetPassword(ResetPasswordRequest request)
         {
-            return await _userService.ResetPasswordAsync(request.Id, request.NewPasswrod);
+            return await _executeService.TryExecute(() => _userService.ResetPasswordAsync(request.Id, request.NewPasswrod));
         }
 
     }

@@ -5,7 +5,7 @@ namespace Common.Users.Dto
     /// <summary>
     /// Юзеры
     /// </summary>
-    public sealed class User
+    public sealed class UserDto
     {
         /// <summary>
         /// ID юзера

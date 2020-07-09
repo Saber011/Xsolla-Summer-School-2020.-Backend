@@ -21,20 +21,20 @@ namespace Xsolla_Summer_School_2020._Backend.Interfaces
         /// Создание пользователя
         /// </summary>
         /// <param name="user">параметры запроса</param>
-        Task<User> CreateAsync(UserRequest user);
+        Task<UserDto> CreateAsync(UserRequest user);
 
         /// <summary>
         /// Удаление пользователя
         /// </summary>
         /// <param name="id">Индификатор пользователя</param>
-        Task<dynamic> DeleteAsync(int id);
+        Task<UserDto> DeleteAsync(int id);
 
         /// <summary>
         /// Изменить пароль
         /// </summary>
         /// <param name="id">Индификатор пользователя</param>
         /// <param name="newPassword">Новый пароль</param>
-        Task<dynamic> ResetPasswordAsync(int id, string newPassword);
+        Task<UserDto> ResetPasswordAsync(int id, string newPassword);
 
         /// <summary>
         /// Получить всех пользователей
