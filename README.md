@@ -20,7 +20,7 @@
 <pre class="code highlight js-syntax-highlight plaintext white" lang="plaintext"><code><span id="LC1" class="line" lang="plaintext">dotnet publish -c Release</span></code></pre>
 <p data-sourcepos="57:1-57:34" dir="auto">Для запуска тестов</p>
 <pre class="code highlight js-syntax-highlight plaintext white" lang="plaintext"><code><span id="LC1" class="line" lang="plaintext">dotnet test</span></code></pre>
-<p data-sourcepos="63:1-63:258" dir="auto"><em>Приложение опубликовано по адресу: <br></em></p>
+<p data-sourcepos="63:1-63:258" dir="auto"><em>Приложение опубликовано по адресу (Swagger): http://canuserasp-001-site1.ctempurl.com/index.html<br></em></p>
 <h3 data-sourcepos="65:1-65:7" dir="auto">
 IDE</h3>
 <p data-sourcepos="67:1-67:219" dir="auto">Приложение разрабатывалось с использованием Visual Studio 2019 Enterprise<br></p>
